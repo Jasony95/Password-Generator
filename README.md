@@ -71,6 +71,9 @@ Result of fifth test using only special characters:
 Result of sixth test generating 128 characters using all group of characters:
 ![result of 128 characters and all group of characters](assets/images/result6.jpg)
 
+Result of using only numbers:
+![result of using only numbers](assets/images/resultnum.jpg)
+
 ## Credits
 
 Credits and sources:
