@@ -1,11 +1,18 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
-var numChar = 0;
+var numCharLength = 0;
 var lowerCaseChar = "abcdefghijklmnopqrstuvwxyz";
 var upperCaseChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var numChar = '0123456789';
 var specialChar = "!@#$%^&*()_+{}[]|\";:'/.,?><";
+var useLowerCaseChar = false;
+var useUpperCaseChar = false;
+var useNum = false;
+var useSpecialChar = false;
+var genPassword = [];
+var numLength;
+var arrChar;
 
 
 
@@ -14,11 +21,18 @@ function convertToArray(arr) {
   return arr;
 }
 
+function convertToStrNoCom(newPassString) {
+  arr = newPassString.join("");
+  return arr;
+}
+
 function askLength() {
   numChar = prompt(`How many characters do you want from 8 to 128?`);
 
-  while (numChar > 128 || numChar < 8) {
-    numChar = prompt(`The number ${numChar} you choose doesn't meet the requirement. Please choose a number from 8 to 128.`);
+  while (numChar > 128 || numChar < 8 || numChar === null || numChar === undefined || isNaN(numChar)) {
+
+      numChar = prompt(`Please choose a number from 8 to 128.`);
+
   };
 
   return numChar;
@@ -27,45 +41,112 @@ function askLength() {
 
 function askBoolLow() {
   var useLowerCaseChar = confirm(`Do you want to use lowercase characters?`);
-  alert("Use Lower Case Char: " + useLowerCaseChar);
   return useLowerCaseChar;
 }
 
 function askBoolUp() {
   var useUpperCaseChar = confirm(`Do you want to use uppercase characters?`);
-  alert("Use Upper Case Char: " + useUpperCaseChar);
   return useUpperCaseChar;
 }
 
 function askBoolNum() {
   var useNum = confirm(`Do you want to use Number characters?`);
-  alert("Use Number Case Char: " + useNum);
   return useNum;
 }
 
 function askBoolSpec() {
   var useSpecChar = confirm(`Do you want to use Special characters?`);
-  alert("Use Special Case Char: " + useSpecChar);
   return useSpecChar;
 }
 
-function determineUse(genPassword, numChar, arrChar) {
+function determineUse(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, genPassword, arrChar, numLength, numCharLength) {
+  var newPassString;
+  var numCharLength = 0;
 
-  for (var i = 0; i < numChar; i++) {
+  genPassword = addOneChar(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, arrLow, arrUp, arrNum, arrSpec, genPassword, numCharLength);
 
-    genPassword = genPassword.toString();
+  newPassString = genPassword;
+
+  for (var i = 0; i < numLength - numCharLength; i++) {
+
     char = chooseChar(arrChar);
-    genPassword += char;
+    newPassString = newPassString.concat(char);
 
   }
 
-  return genPassword;
+  newPassString = convertToArray(newPassString);
 
+  newPassString = sortRandomPosition(newPassString);
+
+  newPassString = newPassString.join("");
+
+  return newPassString;
+
+}
+
+function addOneChar(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, arrLow, arrUp, arrNum, arrSpec, genPassword, numCharLength) {
+  genPassword = genPassword.toString();
+
+  if (useLowerCaseChar) {
+    char = chooseChar(arrLow);
+    genPassword = genPassword.concat(char);
+    numCharLength++;
+  }
+
+  if (useUpperCaseChar) {
+    char = chooseChar(arrUp);
+    genPassword = genPassword.concat(char);
+    numCharLength++;
+  }
+
+  if (useNum) {
+    char = chooseChar(arrNum);
+    genPassword = genPassword.concat(char);
+    numCharLength++;
+  }
+
+  if (useSpecialChar) {
+    char = chooseChar(arrSpec);
+    genPassword = genPassword.concat(char);
+    numCharLength++;
+  }
+
+  return genPassword;
+}
+
+function countBool() {
+  if (useLowerCaseChar) {
+    numCharLength++;
+  }
+
+  if (useUpperCaseChar) {
+    numCharLength++;
+  }
+
+  if (useNum) {
+    numCharLength++;
+  }
+
+  if (useSpecialChar) {
+    numCharLength++;
+  }
+
+  return numCharLength;
+}
+
+function sortRandomPosition(generatePassword) { //Used Fisher-Yates Algorithm for this function; Credits and Source: https://dev.to/codebubb/how-to-shuffle-an-array-in-javascript-2ikj
+  for (let i = generatePassword.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = generatePassword[i];
+    generatePassword[i] = generatePassword[j];
+    generatePassword[j] = temp;
+  }
+
+  return generatePassword;
 }
 
 function chooseChar(arr) {
   var chosenChar = arr[(Math.floor(Math.random() * arr.length))];
-  console.log(chosenChar);
   return chosenChar;
 }
 
@@ -88,42 +169,41 @@ function createCharArr(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialCha
     charArr = [...charArr, ...arrSpec];
   }
 
-  console.log(charArr);
-
   return charArr;
 
 }
 
 function generatePassword() {
+  genPassword = [];
   arrLow = convertToArray(lowerCaseChar);
   arrUp = convertToArray(upperCaseChar);
   arrNum = convertToArray(numChar);
   arrSpec = convertToArray(specialChar);
-  var useLowerCaseChar = false;
-  var useUpperCaseChar = false;
-  var useNum = false;
-  var useSpecialChar = false;
-  var genPassword = [];
-  var numLength;
-  var arrChar;
+  
 
-  numLength = askLength();
-  console.log(`useLowerCase: ${useLowerCaseChar}`);
-  console.log(`chooseChar: ${chooseChar(arrLow)}`);
+  var numLength = askLength();
+
   useLowerCaseChar = askBoolLow();
   useUpperCaseChar = askBoolUp();
   useNum = askBoolNum();
   useSpecialChar = askBoolSpec();
-  console.log(`useLowerCase: ${useLowerCaseChar}`);
-  console.log(`useUpperCaseChar: ${useUpperCaseChar}`);
-  console.log(`useNum: ${useNum}`);
-  console.log(`useSpecialChar: ${useSpecialChar}`);
-  
+
+  while (!useLowerCaseChar == true && !useUpperCaseChar == true && !useNum == true && !useSpecialChar == true) {
+
+    alert("Please click Okay to one of the group of character.");
+    useLowerCaseChar = askBoolLow();
+    useUpperCaseChar = askBoolUp();
+    useNum = askBoolNum();
+    useSpecialChar = askBoolSpec();
+
+  }
+
   arrChar = createCharArr(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, arrLow, arrUp, arrNum, arrSpec);
 
-  genPassword = determineUse(genPassword, numLength, arrChar);
+  genPassword = determineUse(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, genPassword, arrChar, numLength, numCharLength);
 
-  console.log(genPassword);
+  numLength = 0;
+  numCharLength = 0;
 
   return genPassword;
 
