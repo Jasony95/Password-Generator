@@ -61,7 +61,6 @@ function askBoolSpec() {
 
 function determineUse(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, genPassword, arrChar, numLength, numCharLength) {
   var newPassString;
-  var numCharLength = 0;
 
   genPassword = addOneChar(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, arrLow, arrUp, arrNum, arrSpec, genPassword, numCharLength);
 
@@ -79,6 +78,8 @@ function determineUse(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar
   newPassString = sortRandomPosition(newPassString);
 
   newPassString = newPassString.join("");
+
+  numCharLength = 0;
 
   return newPassString;
 
@@ -114,7 +115,10 @@ function addOneChar(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, 
   return genPassword;
 }
 
-function countBool() {
+function countBool(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar) {
+
+  numCharLength = 0;
+
   if (useLowerCaseChar) {
     numCharLength++;
   }
@@ -174,7 +178,8 @@ function createCharArr(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialCha
 }
 
 function generatePassword() {
-  genPassword = [];
+  var genPassword = [];
+  var numCharLength = 0;
   arrLow = convertToArray(lowerCaseChar);
   arrUp = convertToArray(upperCaseChar);
   arrNum = convertToArray(numChar);
@@ -200,10 +205,16 @@ function generatePassword() {
 
   arrChar = createCharArr(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, arrLow, arrUp, arrNum, arrSpec);
 
+  numCharLength = countBool(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar);
+
   genPassword = determineUse(useLowerCaseChar, useUpperCaseChar, useNum, useSpecialChar, genPassword, arrChar, numLength, numCharLength);
 
   numLength = 0;
   numCharLength = 0;
+  var useLowerCaseChar = false;
+  var useUpperCaseChar = false;
+  var useNum = false;
+  var useSpecialChar = false;
 
   return genPassword;
 
