@@ -4,7 +4,7 @@ var generateBtn = document.querySelector("#generate");
 var numCharLength = 0;
 var lowerCaseChar = "abcdefghijklmnopqrstuvwxyz";
 var upperCaseChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-var numChar = '0123456789';
+var numChars = "0123456789";
 var specialChar = "!@#$%^&*()_+{}[]|\";:'/.,?><";
 var useLowerCaseChar = false;
 var useUpperCaseChar = false;
@@ -13,6 +13,7 @@ var useSpecialChar = false;
 var genPassword = [];
 var numLength;
 var arrChar;
+var numChar = 0;
 
 
 
@@ -182,7 +183,7 @@ function generatePassword() {
   var numCharLength = 0;
   arrLow = convertToArray(lowerCaseChar);
   arrUp = convertToArray(upperCaseChar);
-  arrNum = convertToArray(numChar);
+  arrNum = convertToArray(numChars);
   arrSpec = convertToArray(specialChar);
   
 
